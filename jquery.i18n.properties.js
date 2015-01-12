@@ -237,6 +237,14 @@ $.i18n.browserLang = function() {
 
 /** Load and parse .properties files */
 function loadAndParseFile(filename, settings) {
+	
+	i18nfName = 'i18nmp'+filename;
+	i18nmp = sessionStorage.getItem(i18nfName);
+	if (i18nmp != null){ 
+		$.i18n.map = JSON.parse(i18nmp);
+		return;
+	}
+	
 	$.ajax({
         url:        filename,
         async:      false,
@@ -245,6 +253,7 @@ function loadAndParseFile(filename, settings) {
         dataType:   'text',
         success:    function(data, status) {
         				parseData(data, settings.mode); 
+						sessionStorage.setItem( i18nfName, JSON.stringify($.i18n.map));
 					}
     });
 }
